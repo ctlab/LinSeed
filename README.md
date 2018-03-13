@@ -87,7 +87,7 @@ corners.
     lo$selectGenes(100)
     lo$projectionPlot()
 
-![](/https://www.dropbox.com/s/w8vql525f3c42td/unnamed-chunk-5-1.png?raw=1)
+![](https://www.dropbox.com/s/w8vql525f3c42td/unnamed-chunk-5-1.png?raw=0)
 
 Deconvolution
 -------------
