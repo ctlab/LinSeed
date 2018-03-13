@@ -1,0 +1,97 @@
+---
+title: "Linseed Tutorial"
+author: "Konstantin Zaitsev"
+date: "March 13, 2018"
+output: html_document
+---
+# Linseed tutorial
+
+Linseed (LINear Subspace identification for gene Expresion Deconvolution) is a package that provides tools and interface to explore gene expression datasets in linear space.
+
+## Load the library
+
+```{r warning=FALSE, message=FALSE}
+library(linseed)
+```
+
+## Getting started with linseed
+
+To start working with gene expression data, we need to create a new LinseedObject, in this tutorial we will use GSE19830 (mixture of Liver, Brain and Lung), we will take only mixed samples (10-42) and will take only 10000 most expressed genes.
+
+```{r warning=FALSE, message=FALSE}
+lo <- LinseedObject$new("GSE19830", samples=10:42, topGenes=10000)
+```
+
+## Coolinearity networks
+
+To build a coolinearity network we first have to evaluate all pairwise collinearity coefficients and then select genes that have at least one gene that is very collinear ( $R^2 >= 0.99$ ) with it and 10 genes that are less collinear ( $R^2 >= 0.95$ ). We only leave genes that meet both requirements. Be very carefull `calculatePairwiseLinearity` is very memory-demanding method ( $N^2$ memory where $N$ is the number of genes).
+
+```{r networks, }
+lo$calculatePairwiseLinearity(negToZero=T)
+genes1 <- lo$getGenesByCutOff(0.99, 1)
+genes2 <- lo$getGenesByCutOff(0.95, 10)
+goodGenes <- intersect(genes1, genes2)
+subnetwork <- lo$pairwise[goodGenes, goodGenes]
+
+```
+
+To visualiaze network we can use pheatmap package or use `hclust` itself.
+
+```{r visi}
+library(pheatmap)
+library(RColorBrewer)
+
+pheatmap(subnetwork, clustering_method = "average",
+         show_rownames = F, show_colnames = F, 
+         color = colorRampPalette(c("blue", "white", "red"))(100),
+         border_color = NA)
+
+```
+
+## Complete deconvolution
+
+First step is identification of the number of the cell types presented in the mixture. 
+
+```{r warning=FALSE, message=FALSE}
+lo$svdPlot(dataset="norm")
+```
+
+we can suggest from the figure, that since most of the variance is explained by first three singular vectors of SVD, that our dataset is as mixture of 3 cell types.
+
+## Projection
+
+Once we know number of cell types, we can project the data into a plane.
+
+```{r warning=FALSE, message=FALSE}
+lo$setCellTypeNumber(3)
+lo$project()
+lo$projectionPlot()
+```
+
+
+## Corner identification
+
+Once we projected the data into plane, we can identify simplex corner using SISAL algorithm and then select genes closest to identified corners. 
+
+```{r warning=FALSE, message=FALSE}
+set.seed(1)
+lo$sisalCorners(tau=2^-6, nonNeg=T, iters=300)
+lo$selectGenes(100)
+lo$projectionPlot()
+```
+
+## Deconvolution
+
+Once we selected signature genes, we can use them as an input for DSA algorithm to perform deconvolution.
+
+```{r warning=FALSE, message=FALSE}
+set.seed(1)
+lo$deconvolve(dataset="raw")
+
+data("proportionsLiverBrainLung")
+actualProportions <- proportionsLiverBrainLung[, 10:42]
+
+plotProportions(lo$proportions, actualProportions[c(2, 1, 3), ],
+                pnames=c("Linseed", "Actual proportions"))
+
+```

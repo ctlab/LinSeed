@@ -1,0 +1,43 @@
+#' GSE19830 proportions
+#'
+#' tissue proportions from GSE19830 experiment:
+#' 3 tissues (liver, brain and lung) were mixed in different proportions:
+#'
+#' GSM495209-GSM495211 pure liver samples
+#' GSM495212-GSM495214 pure brain samples
+#' GSM495215-GSM495217 pure lung samples
+#' GSM495218-GSM495220 5 % Liver / 25 % Brain / 70 % Lung
+#' GSM495221-GSM495223 70 % Liver / 5 % Brain / 25 % Lung
+#' GSM495224-GSM495226 25 % Liver / 70 % Brain / 5 % Lung
+#' GSM495227-GSM495229 70 % Liver / 25 % Brain / 5 % Lung
+#' GSM495230-GSM495232 45 % Liver / 45 % Brain / 10 % Lung
+#' GSM495233-GSM495235 55 % Liver / 20 % Brain / 25 % Lung
+#' GSM495236-GSM495238 50 % Liver / 30 % Brain / 20 % Lung
+#' GSM495239-GSM495241 55 % Liver / 30 % Brain / 15 % Lung
+#' GSM495242-GSM495244 50 % Liver / 40 % Brain / 10 % Lung
+#' GSM495245-GSM495247 60 % Liver / 35 % Brain / 5 % Lung
+#' GSM495248-GSM495250 65 % Liver / 34 % Brain / 1 % Lung
+#'
+#' @docType data
+#' 
+#' @name proportionsLiverBrainLung
+#'
+#' @usage data(proportionsLiverBrainLung)
+#'
+#' @format An object of class \code{'matrix'}
+#'
+#' @keywords datasets
+#'
+#' @references Shen-Orr SS, Tibshirani R, Khatri P, et al. cell type-specific gene expression differences in complex tissues. Nature methods. 2010;7(4):287-289. doi:10.1038/nmeth.1439.
+#' (\href{http://www.ncbi.nlm.nih.gov/pubmed/20208531}{PubMed})
+#'
+#' @source \href{http://qtlarchive.org/db/q?pg=projdetails&proj=moore_2013b}{QTL Archive}
+#'
+#' @examples
+#' 
+#' @export
+#' data("proportionsLiverBrainLung")
+#' mixedProportions <- proportionsLiverBrainLung[, 10:42]
+#' barplot(mixedProportions, main='Proprotions of tissues in samples', col=c('#00BA38','#F8766D', '#619CFF'),
+#'         legend = rownames(mixedProportions))
+NULL
