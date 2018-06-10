@@ -84,6 +84,7 @@ preprocessDataset <- function(dataset, annotation = NULL, geneSymbol = "Gene Sym
 #'
 #' @return clustered dataset, matrix, first column identifies cluster of the row
 #' @import GEOquery
+#' @import Biobase
 #' @import preprocessCore
 #' @export
 preprocessGSE <- function(geoAccesion, annotate = TRUE, normalize=TRUE, ...) {
