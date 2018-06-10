@@ -2,3 +2,4 @@
 */*.so
 .Rhistory
 linseed.Rproj
+.Rproj.user

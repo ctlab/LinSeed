@@ -91,8 +91,9 @@ preprocessGSE <- function(geoAccesion, annotate = TRUE, normalize=TRUE, ...) {
     if (length(gse) > 1) {
         stop("This GSE has multiple expression sets. It's probably multiseries. Provide single series experiment")
     }
+    
     gse <- gse[[1]]
-    expressionData <- exprs(gse)
+    expressionData <- Biobase::exprs(gse)
 
     if (normalize) {
         expressionData <- logDataset(expressionData)
