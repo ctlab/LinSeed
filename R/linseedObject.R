@@ -323,7 +323,7 @@ LinseedObject <- R6Class("LinseedObject",
     
     
     getGenesByCutOff = function(r2Threshold, k) {
-      subnetwork <- r2Filtering(self$pairwise, 0.99, 1)
+      subnetwork <- r2Filtering(self$pairwise, r2Threshold, k)
       subnetwork$filteredGenes
     },
     
