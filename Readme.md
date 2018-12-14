@@ -27,7 +27,7 @@ lo <- LinseedObject$new("GSE19830", samples=10:42, topGenes=10000)
 Coolinearity networks
 ---------------------
 
-To build a coolinearity network we first have to evaluate all pairwise collinearity coefficients, all pairwise spearman correlation and then run select genes that have at least one gene that is very collinear ( *R*<sup>2</sup> &gt; =0.99 ) with it and 10 genes that are less collinear ( *R*<sup>2</sup> &gt; =0.95 ). We only leave genes that meet both requirements. Be very carefull `calculatePairwiseLinearity` is very memory-demanding method ( *N*<sup>2</sup> memory where *N* is the number of genes).
+To build a coolinearity network we first have to evaluate all pairwise collinearity coefficients, all pairwise spearman correlation and then run significance test which will calculate p value for each each by shuffling network weights randomly.
 
 ``` r
 lo$calculatePairwiseLinearity()
@@ -40,6 +40,13 @@ lo$significancePlot(0.01)
 
 ``` r
 lo$filterDatasetByPval(0.01)
+```
+
+    ## Total number of genes is 10000
+
+    ## The number of genes after filtering is 3297
+
+``` r
 lo$svdPlot()
 ```
 
@@ -67,7 +74,7 @@ lo$smartSearchCorners(dataset="filtered", error="norm")
 
     ## Final vector is
 
-    ## 4 5 2
+    ## 4 1 5
 
     ## 
 
