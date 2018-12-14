@@ -88,7 +88,7 @@ plotProportions(lo$proportions)
 We can also use tSNE to haave an idea of how data looks like when dimensionally reduced.
 
 ``` r
-# lets select 100 genes closest to 
+# lets select 100 genes closest to the simplex corners 
 lo$selectGenes(100)
 lo$tsnePlot()
 ```
