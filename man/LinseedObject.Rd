@@ -18,7 +18,7 @@ The Linseed Object Class.
 Provides an interface to perform 
 collinear network construction,
 linear subspace identification, 
-signature gene detection and gene expression deconvolution
+simplex corner identification and gene expression deconvolution
 }
 \section{Fields}{
 
@@ -38,7 +38,7 @@ corner detection and deconvolution}
 
 \item{\code{distances}}{Stores distances for every gene to each corner in reduced space}
 
-\item{\code{clusters}}{List that stores signatures genes for deconvolution, can be set manually or can be obtained by \code{selectGenes(k)}}
+\item{\code{markers}}{List that stores signatures genes for deconvolution, can be set manually or can be obtained by \code{selectGenes(k)}}
 
 \item{\code{signatures}}{Deconvolution signature matrix}
 
@@ -55,7 +55,7 @@ corner detection and deconvolution}
 }
 
 \examples{
-LinseedObject$new("GSE19830", samples=10:42, topGenes=12000)
+LinseedObject$new("GSE19830", samples=10:42, topGenes=10000)
 
 
 }

@@ -7,7 +7,7 @@
 vca(R, p, SNR = NULL, verbose = F)
 }
 \arguments{
-\item{R}{matrix describing points (possibly lyinh in a simplex) in high dimensional space}
+\item{R}{matrix describing points (possibly lying in a simplex) in high dimensional space}
 
 \item{p}{number endpoints to find}
 

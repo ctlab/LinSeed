@@ -1,13 +1,12 @@
 #' Projective projection
 #'
-#' @param Y 
-#' @param p 
-#' @param spherize 
+#' @param Y High dimensional data to project
+#' @param p Dimensionality to project to
+#' @param spherize Spherize dataset or not
 #' 
 #' @import corpcor
 #'
 #' @return
-#' @export
 #'
 #' @examples
 projectiveProjection <- function(Y, p, spherize=F) {
@@ -41,4 +40,36 @@ projectiveProjection <- function(Y, p, spherize=F) {
     Y <- Y / sqrt(p)
   }
   return(Y)
+}
+
+
+#' Get projective projection
+#'
+#' @param Y High dimensional data to project
+#' @param p Dimensionality to project to
+#' @param spherize Spherize dataset or not
+#' 
+#' @import corpcor
+#'
+#' @return
+#'
+#' @examples
+getProjectiveProjection <- function(Y, p, spherize=F) {
+  L <- nrow(Y)
+  N <- ncol(Y)
+  
+  Ymean <- apply(Y, 1, mean)
+  ym <- matrix(Ymean, ncol=1)
+  Y <- Y - Ymean
+  svdObj <- fast.svd(Y)
+  Up <- svdObj$u[, 1:(p-1)]
+  proj <- Up %*% t(Up)
+  D <- svdObj$d[1:(p-1)]
+  
+  Y <- proj %*% Y
+  Y <- Y + Ymean
+  YmeanOrtho <- ym - proj %*% ym
+  Up <- cbind(Up, YmeanOrtho / (sqrt(sum(YmeanOrtho ^ 2))))
+
+  return(Up)
 }

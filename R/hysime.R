@@ -11,8 +11,10 @@
 #' @param Rn estimated noise correlation matrix
 #' @param verbose verbosity, default valie is FALSE
 #'
+#'
+#' @import ggplot2
+#'
 #' @return list
-#' @export
 #'
 #' @examples
 hysime <- function(Y, W, Rn, verbose=FALSE) {
@@ -62,14 +64,13 @@ hysime <- function(Y, W, Rn, verbose=FALSE) {
     costFSort <- PySort + PnSort
 
     if (verbose) {
-        require(ggplot2)
         ind <- 1:(L - 1)
         toPlot <- data.frame(indice = rep(ind, 3),
                              error = c(costFSort[ind], PySort[ind], PnSort[ind]),
                              error_type = c(rep("MSE", L-1), rep("Proj Error", L-1), rep("Noise Power", L-1)))
-        plot <- ggplot2::ggplot(data=toPlot, aes(x=indice, y=error, group=error_type, color=error_type)) +
-            ggplot2::geom_point() + ggplot2::geom_line() +
-            ggplot2::scale_y_log10() + ggplot2::theme_bw()
+        plot <- ggplot(data=toPlot, aes(x=indice, y=error, group=error_type, color=error_type)) +
+            geom_point() + geom_line() +
+            scale_y_log10() + theme_bw()
         return(list(k=kf, E=Ek, plot=plot))
     }
     return(list(k=kf, E=Ek, plot=NULL))

@@ -11,6 +11,8 @@ preprocessGSE(geoAccesion, annotate = TRUE, normalize = TRUE, ...)
 
 \item{annotate}{annotate with feature data from provided geo platform}
 
+\item{normalize}{quantile normalize GEO dataset}
+
 \item{...}{arguments further passed to preprocessDataset}
 }
 \value{

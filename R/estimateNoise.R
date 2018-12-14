@@ -11,7 +11,6 @@
 #' @param verbose logical, default value is FALSE
 #'
 #' @return list with two elements, w -- estimated noise and Rw estimated noise correlation matrix
-#' @export
 #'
 #' @examples
 estimateNoise <- function(Y, noiseType="additive", verbose=FALSE) {

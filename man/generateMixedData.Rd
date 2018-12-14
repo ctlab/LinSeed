@@ -19,17 +19,23 @@ generateMixedData(samples = 40, genes = 12000, cellTypes = 3,
 
 \item{bias}{if not null bias should be a number in between 0 and 1, one of cell types presented in mix will be more abundunt and one cell type will be less abundunt}
 
+\item{spearmanThreshold}{Spearman treshold that has to be between generated samples}
+
 \item{pureGenes}{number of genes which are not noisy}
 
 \item{noiseDeviation}{standart deviation of normally distributed noise value}
 
+\item{sampleLogMean}{average log expression of pure samples}
+
+\item{sampleLogSd}{standard deviation of log expression of pure samples}
+
 \item{removeAngles}{if TRUE there will be no signature genes in the mix (simplex corners will be removed)}
+
+\item{cutCoef}{if removeAngles == T how much to cut angles}
 
 \item{removeBorders}{if TRUE where will be no genes close to simplex border}
 
 \item{borderShift}{number in between 0 and 1, every value in basis is guaranteed to be at least borderShift}
-
-\item{cutCoeff}{corners are removed as points that lie outside of cellTypes-dimensional sphere with radius of cutCoef}
 }
 \description{
 Generates mixed data with or without noise under assumption of linear model

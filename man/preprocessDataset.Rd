@@ -4,8 +4,8 @@
 \alias{preprocessDataset}
 \title{Preprocess Dataset}
 \usage{
-preprocessDataset(dataset, annotation = NULL, geneSymbol = "Gene Symbol",
-  samples = NULL, topGenes = 10000, topVar = FALSE, ...)
+preprocessDataset(dataset, annotation = NULL,
+  geneSymbol = "Gene symbol", samples = NULL, topGenes = 10000)
 }
 \arguments{
 \item{dataset}{matrix, data.frame, path to file or GSE accession with expression data}
@@ -30,9 +30,5 @@ Preprocesses given dataset. Preprocessing consists of 3 major steps:
 3) All genes are clustered with Kmeans using cosine simillarity as distance.
 }
 \examples{
-data('datasetLiverBrainLung')
-prep <- preprocessDataset(datasetLiverBrainLung)
-prep <- preprocessDataset(datasetLiverBrainLung, k=5) # 5 clusters
-prep <- preprocessDataset(datasetLiverBrainLung, topGenes=6000) # leave only top 6k genes
 
 }

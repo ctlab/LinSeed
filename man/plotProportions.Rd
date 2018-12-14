@@ -10,6 +10,10 @@ plotProportions(..., pnames = NULL, point_size = 2, line_size = 1)
 \item{...}{matricies, data frames, NMF objects of estimated proportions or paths to file}
 
 \item{pnames}{experiment titles}
+
+\item{point_size}{point size for plot}
+
+\item{line_size}{line size for plot}
 }
 \value{
 ggplot object
@@ -20,17 +24,5 @@ If ggplot2 and reshape2 are installed will use them and return ggplot object
 Otherwise will use standart R functions
 }
 \examples{
-set.seed(31)
-data('datasetLiverBrainLung')
-mixed <- datasetLiverBrainLung[, 10:42]
-preprocessed <- preprocessDataset(mixed, k=5) # 5 clusters
-accuracy <- clusdecAccuracy(preprocessed, 3) # assuming 3 cell types
-results <- chooseBest(preprocessed, accuracy) # choose best combination of clusters as putative sigantures
-
-plotProportions(results$H) # plotting proportions
-
-data('proportionsLiverBrainLung') # or we can compare with actual mixed proportions
-mixedProportions <- proportionsLiverBrainLung[, 10:42]
-plotProportions(results$H, mixedProportions, pnames=c('ClusDec estimated', 'Actual'))
 
 }

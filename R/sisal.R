@@ -15,12 +15,12 @@
 #' @param m0 starting points for SISAL algorithm, default points are getting from VCA
 #' @param verbose verbosity
 #' @param returnPlot logical, is it needed to return dataframe or not
+#' @param nonNeg logical, force simplex corners to non-negative space
 #'
 #' @import corpcor
 #' @import dplyr
 #'
 #' @return
-#' @export
 #'
 #' @examples
 sisal <- function(Y, p, iters = 80, tau = 1,
@@ -53,6 +53,7 @@ sisal <- function(Y, p, iters = 80, tau = 1,
     D <- svdObj$d[1:(p-1)]
     
     Y <- proj %*% Y
+    
     Y <- Y + Ymean
     YmeanOrtho <- ym - proj %*% ym
     Up <- cbind(Up, YmeanOrtho / (sqrt(sum(YmeanOrtho ^ 2))))
@@ -74,7 +75,7 @@ sisal <- function(Y, p, iters = 80, tau = 1,
     ## Init
 
     if (is.null(m0)) {
-        Mvca <- vca(Y, p)
+        Mvca <- vca(Y, p, verbose=verbose)
         M <- Mvca
         Ym <- apply(M, 1, mean)
         dQ <- M - Ym
@@ -97,7 +98,6 @@ sisal <- function(Y, p, iters = 80, tau = 1,
         toPlot <- data.frame(
             x = Y[1, ],
             y = Y[2, ],
-            z = Y[3, ],
             type = "data point",
             iter = NA,
             tau = NA
@@ -105,7 +105,6 @@ sisal <- function(Y, p, iters = 80, tau = 1,
         starting <- data.frame(
             x = M[1, ],
             y = M[2, ],
-            z = M[3, ],
             type = "sisal",
             iter = 0,
             tau = tau
@@ -189,25 +188,6 @@ sisal <- function(Y, p, iters = 80, tau = 1,
             fquad_tmp <- t(q - q0) %*% g + 0.5 * t(q - q0) %*% H %*% (q - q0) + tau * sum(hinge(Q %*% Y))
             fval_tmp <- -log(abs(det(Q))) + tau * sum(hinge(Q %*% Y))
             
-            # if (nonNeg) {
-            #   qorig <- Up %*% solve(Q)
-            #   
-            #   if (any(qorig < 0)) {
-            #     diff <- Ymean - qorig
-            #     
-            #     shift <- sapply(1:p, function(i) {
-            #       tmp <- qorig[, i] / diff[, i]
-            #       ifelse(any(qorig[, i] < 0), min(tmp[qorig[, i] < 0]), 0)
-            #     })
-            #     
-            #     shift <- -shift + (0.00001)
-            #     qorig <- qorig + diff %*% diag(shift)
-            #     Q <- solve(t(Up) %*% qorig)
-            #     q <- Q
-            #     dim(q) <- c(nrow(Q) * ncol(Q), 1)
-            #   }
-            # }
-            
             fquad <- t(q - q0) %*% g + 0.5 * t(q - q0) %*% H %*% (q - q0) + tau * sum(hinge(Q %*% Y))
             fval <- -log(abs(det(Q))) + tau * sum(hinge(Q %*% Y))
             
@@ -237,7 +217,6 @@ sisal <- function(Y, p, iters = 80, tau = 1,
             toAdd <- data.frame(
                 x = M[1, ],
                 y = M[2, ],
-                z = M[3, ],
                 type = "sisal",
                 iter = k,
                 tau = tau

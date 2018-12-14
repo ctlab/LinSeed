@@ -4,8 +4,9 @@
 \alias{sisal}
 \title{SISAL algorithm}
 \usage{
-sisal(Y, p, iters = 80, tau = 1, mu = p * 1000/ncol(Y), spherize = F,
-  tol = 0.01, m0 = NULL, verbose = F, returnPlot = T, nonNeg = F)
+sisal(Y, p, iters = 80, tau = 1, mu = p * 1000/ncol(Y),
+  spherize = F, tol = 0.01, m0 = NULL, verbose = F,
+  returnPlot = T, nonNeg = F)
 }
 \arguments{
 \item{Y}{gene expression matrix}
@@ -27,6 +28,11 @@ sisal(Y, p, iters = 80, tau = 1, mu = p * 1000/ncol(Y), spherize = F,
 \item{verbose}{verbosity}
 
 \item{returnPlot}{logical, is it needed to return dataframe or not}
+
+\item{nonNeg}{logical, force simplex corners to non-negative space}
+}
+\value{
+
 }
 \description{
 Sisal alogorithm for simplex endpoints identification

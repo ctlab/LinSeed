@@ -1,5 +1,5 @@
 */*.o
 */*.so
 .Rhistory
-linseed.Rproj
+*.Rproj
 .Rproj.user

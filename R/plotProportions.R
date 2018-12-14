@@ -5,29 +5,20 @@
 #' Otherwise will use standart R functions
 #'
 #'@param ... matricies, data frames, NMF objects of estimated proportions or paths to file
+#'@param point_size point size for plot
+#'@param line_size line size for plot
 #'@param pnames experiment titles
+#'
 #'@return ggplot object
 #'
+#'
+#'@import ggplot2
+#'@import reshape2
+#'
 #'@examples
-#' set.seed(31)
-#' data('datasetLiverBrainLung')
-#' mixed <- datasetLiverBrainLung[, 10:42]
-#' preprocessed <- preprocessDataset(mixed, k=5) # 5 clusters
-#' accuracy <- clusdecAccuracy(preprocessed, 3) # assuming 3 cell types
-#' results <- chooseBest(preprocessed, accuracy) # choose best combination of clusters as putative sigantures
-#'
-#' plotProportions(results$H) # plotting proportions
-#'
-#' data('proportionsLiverBrainLung') # or we can compare with actual mixed proportions
-#' mixedProportions <- proportionsLiverBrainLung[, 10:42]
-#' plotProportions(results$H, mixedProportions, pnames=c('ClusDec estimated', 'Actual'))
 #'
 #'@export
 plotProportions <- function(..., pnames = NULL, point_size=2, line_size=1) {
-    requireNamespace("ggplot2")
-    requireNamespace("reshape2")
-
-
     proportions <- list(...)
     proportions <- lapply(proportions, toMatrix)
 
@@ -48,33 +39,112 @@ plotProportions <- function(..., pnames = NULL, point_size=2, line_size=1) {
 
 
     cellTypes <- nrow(proportions[[1]])
-    results.m <- reshape2::melt(proportions)
+    results.m <- melt(proportions)
     results.m[, 4] <- as.factor(results.m[, 4])
-
-    gplot <- ggplot2::ggplot(results.m,
-                             ggplot2::aes(x = as.numeric(Var2),
+    
+    results.m <- results.m[sample(nrow(results.m)), ]
+    
+    gplot <- ggplot(results.m,
+                             aes(x = as.numeric(Var2),
                                           y = value,
                                           fill = Var1,
                                           color = L1)) +
-        ggplot2::geom_line(size=line_size) +
-        ggplot2::geom_point(size=point_size) +
-        ggplot2::scale_x_discrete(labels = colnames(proportions[[1]])) +
-        ggplot2::facet_grid(Var1 ~ .) +
-        ggplot2::ylab("proportions") +
-        ggplot2::ylim(0, 1.1) +
-        ggplot2::theme_bw() +
-        ggplot2::theme(axis.title.x = ggplot2::element_blank(),
-                       axis.text.x = ggplot2::element_text(angle = 45,
+        geom_line(size=line_size) +
+        geom_point(size=point_size) +
+        scale_x_discrete(labels = colnames(proportions[[1]])) +
+        facet_grid(Var1 ~ .) +
+        ylab("proportions") +
+        ylim(0, 1.1) +
+        theme_bw() +
+        theme(axis.title.x = element_blank(),
+                       axis.text.x = element_text(angle = 45,
                                                            hjust = 1)) +
-        ggplot2::guides(fill = FALSE)
+        guides(fill = FALSE)
     if (length(proportions) > 1) {
-        gplot <- gplot + ggplot2::theme(legend.title = ggplot2::element_blank(),
+        gplot <- gplot + theme(legend.title = element_blank(),
             legend.position = "top")
 
     } else {
-        gplot <- gplot + ggplot2::theme(legend.position = "none")
+        gplot <- gplot + theme(legend.position = "none")
     }
     gplot
+}
+
+#' Proportions dot plot
+#'
+#' @param predicted matrix of predicted proportions
+#' @param actual matrix of actual proportions
+#' @param main plot title
+#' @param guess if True will function will try to guess how to reorder rows of predicted proportions to match rows of actual proportions
+#' @param showR2 calculate and show R squared statistics
+#'
+#' @import ggplot2
+#' @import reshape2
+#'
+#' @return
+#' @export
+#'
+#' @examples
+dotPlotPropotions <- function(predicted, actual, guess=FALSE, main=NULL, showR2=FALSE) {
+  predicted <- as.matrix(predicted)
+  actual <- as.matrix(actual)
+  
+  if (guess) {
+    predicted <- predicted[guessOrder(predicted, actual), ]
+  }
+  
+  colnames(predicted) <- colnames(actual)
+  rownames(predicted) <- rownames(actual)
+  
+  xmelt <- melt(predicted)
+  ymelt <- melt(actual)
+  
+  colnames(ymelt) <- c("Cell Type", "Sample", "Actual")
+  colnames(xmelt) <- c("Cell Type", "Sample", "Predicted")
+  
+  total <- cbind(ymelt, xmelt[, 3, drop=F])
+  
+  pred <- as.numeric(predicted)
+  act <- as.numeric(actual)
+  
+  r2 <- summary(lm(pred ~ act))$adj.r.squared
+  
+  pl <- ggplot(data=total, aes(x=Actual, y=Predicted, color=`Cell Type`)) +
+    geom_point() + theme_bw(base_size=8) +
+    theme(aspect.ratio = 1) + geom_abline(slope=1, intercept = 0, lty=2) +
+    xlim(c(0, 1)) + ylim(c(0, 1))
+  if (!is.null(main)) {
+    pl <- pl + labs(title=main)
+  }
+  if (showR2) {
+    subs <- substitute(italic(R)^2~"="~r2, list(r2=r2))
+    pl <- pl + annotate("text", label=as.character(as.expression(subs)), parse=T, x = 0.2, y=0.9)
+  }
+  pl
+}
+
+
+#' guess the order
+#'
+#' Function tries to guess ordering for rows of predicted proportions to match rows of actual proportions
+#'
+#'
+#' @importFrom combinat permn
+#' @param predicted predicted propotions
+#' @param actual actual proportions
+#'
+#' @return numeric, correct order of predicted proportions
+#'
+#' @examples
+guessOrder <- function(predicted, actual) {
+  ctn <- nrow(predicted)
+  allPerms <- permn(ctn)
+  
+  vals <- sapply(allPerms, function(perm) {
+    sum(diag(cor(t(predicted[perm, ]), t(actual))))
+  })
+  perm <- allPerms[[which.max(vals)]]
+  return(perm)
 }
 
 
@@ -84,8 +154,6 @@ toMatrix <- function(x) {
         return(as.matrix(x))
     if (inherits(x, "NMF"))
         return(toMatrix(coef(x)))
-    if (class(x) == "character")
-        return(toMatrix(read.table.mine(x)))
     if (class(x) == "matrix")
         return(x)
     stop("invalid type for plotting")

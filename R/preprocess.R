@@ -16,14 +16,10 @@
 #' @return clustered dataset, matrix, first column identifies cluster of the row
 #'
 #' @examples
-#' data('datasetLiverBrainLung')
-#' prep <- preprocessDataset(datasetLiverBrainLung)
-#' prep <- preprocessDataset(datasetLiverBrainLung, k=5) # 5 clusters
-#' prep <- preprocessDataset(datasetLiverBrainLung, topGenes=6000) # leave only top 6k genes
 #'
 #' @export
-preprocessDataset <- function(dataset, annotation = NULL, geneSymbol = "Gene Symbol",
-    samples = NULL, topGenes = 10000, topVar=FALSE, ...) {
+preprocessDataset <- function(dataset, annotation = NULL, geneSymbol = "Gene symbol",
+    samples = NULL, topGenes = 10000) {
     if (inherits(dataset, "character")) {
         if (file.exists(dataset)) {
             message("File ", dataset, " exists")
@@ -52,23 +48,16 @@ preprocessDataset <- function(dataset, annotation = NULL, geneSymbol = "Gene Sym
         dataset <- collapseGenes(dataset, fdata)
     }
 
+    # removing zeroes
+    dataset <- dataset[!(rowSums(dataset) == 0), ]
     topGenes <- min(topGenes, nrow(dataset))
-
-    if (topVar) {
-        # getting genes with most variance coefficients
-        dataset <- linearizeDataset(dataset)
-        varCoefs <- apply(dataset, 1, function(r) sd(r) / mean(r))
-        topRows <- order(varCoefs, decreasing = TRUE)[1:topGenes]
-        topDataset <- dataset[topRows, ]
-    } else {
-        # finding top genes in log scale
-        dataset <- logDataset(dataset)
-        topRows <- order(rowSums(dataset), decreasing = TRUE)[1:topGenes]
-        topDataset <- dataset[topRows, ]
-    }
-
+    dataset <- logDataset(dataset)
+    topRows <- order(rowSums(dataset), decreasing = TRUE)[1:topGenes]
+    topDataset <- dataset[topRows, ]
+    
     # clustering in linear space
     topDataset <- linearizeDataset(topDataset)
+    topDataset <- topDataset[!duplicated(topDataset), ]
     # clustered <- clusterCosine(topDataset, k)
     return(topDataset)
 
@@ -80,15 +69,16 @@ preprocessDataset <- function(dataset, annotation = NULL, geneSymbol = "Gene Sym
 #'
 #' @param geoAccesion e.g 'GSE19830'
 #' @param annotate annotate with feature data from provided geo platform
+#' @param normalize quantile normalize GEO dataset
 #' @param ... arguments further passed to preprocessDataset
 #'
 #' @return clustered dataset, matrix, first column identifies cluster of the row
 #' @import GEOquery
-#' @import Biobase
+#' @importFrom Biobase exprs
 #' @import preprocessCore
 #' @export
 preprocessGSE <- function(geoAccesion, annotate = TRUE, normalize=TRUE, ...) {
-    gse <- getGEO(geoAccesion)
+    gse <- getGEO(geoAccesion, AnnotGPL = T)
     if (length(gse) > 1) {
         stop("This GSE has multiple expression sets. It's probably multiseries. Provide single series experiment")
     }

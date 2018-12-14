@@ -11,9 +11,12 @@
 #' @param pureGenes number of genes which are not noisy
 #' @param noiseDeviation standart deviation of normally distributed noise value
 #' @param removeAngles if TRUE there will be no signature genes in the mix (simplex corners will be removed)
-#' @param cutCoeff corners are removed as points that lie outside of cellTypes-dimensional sphere with radius of cutCoef
 #' @param removeBorders if TRUE where will be no genes close to simplex border
 #' @param borderShift number in between 0 and 1, every value in basis is guaranteed to be at least borderShift
+#' @param spearmanThreshold Spearman treshold that has to be between generated samples
+#' @param sampleLogMean average log expression of pure samples
+#' @param sampleLogSd standard deviation of log expression of pure samples
+#' @param cutCoef if removeAngles == T how much to cut angles
 #'
 #' @return
 #' @export
@@ -51,12 +54,12 @@ generateMixedData <- function(samples=40, genes=12000, cellTypes=3, bias = NULL,
     for (j in 1:cellTypes) basis[, j] <- generateSample(genes)
     basis <- 2^basis
     
-    
-    
     if (removeAngles) {
-        while (!all(sqrt(colSums(basis^2)) < cutCoef)) {
-            badIds <- sqrt(colSums(basis^2)) >= cutCoef
-            basis[, badIds] <- sampleFromSimplexUniformly(sum(badIds), cellTypes, 100000)
+        basisTmp <- basis / rowSums(basis)
+        while (!all(sqrt(rowSums(basisTmp ^ 2)) < cutCoef)) {
+            badIds <- which(sqrt(rowSums(basisTmp ^ 2)) >= cutCoef)
+            basis[badIds, ] <- generateSample(cellTypes * length(badIds))
+            basisTmp <- basis / rowSums(basis)
         }
     }
 
@@ -100,8 +103,6 @@ generateMixedData <- function(samples=40, genes=12000, cellTypes=3, bias = NULL,
 #'
 #'
 #' @return matrix where columns are points
-#'
-#' @import data.table
 #'
 #' @examples
 sampleFromSimplexUniformly <- function(n, k=3, M=100000) {

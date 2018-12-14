@@ -55,8 +55,7 @@ arma::mat fcnnls_c(const arma::mat& C,
     int n_obs = C.n_rows;
     int l_var = C.n_cols;
     if (C.n_rows != A.n_rows) {
-
-        exit(1);
+        throw Rcpp::exception("Wrong argument sizes", "fcnnls.cpp", 4);
     }
     int pRHS = A.n_cols;
     mat W = zeros(l_var, pRHS);

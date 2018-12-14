@@ -9,31 +9,38 @@ Description: The package implements an algorithm to perform deconvolution
     of gene expression dataset without prior
     knowledge of cell-specific markers.
 biocViews: Software, GeneExpression, Clustering
-License: MIT + file LICENCE
+License: MIT + file LICENSE
 LazyData: TRUE
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo, BH
+SystemRequirements: 
+  libxml2-dev, 
+  libssl-dev, 
+  openssl
 Depends:
-    R (>= 3.4),
-    RcppArmadillo
+    R (>= 3.5)
 Imports:
-    CellMix,
     Rcpp,
     RcppArmadillo,
     BH,
     GEOquery,
     Biobase,
     corpcor,
+    combinat,
     NMF,
     R6,
-    data.table,
     dplyr,
     ggplot2,
+    reshape2,
     pheatmap,
-    preprocessCore
+    preprocessCore,
+    progress,
+    Matrix,
+    Rtsne
 Suggests:
+    CellMix,
     BiocStyle,
     knitr,
     rmarkdown,
     testthat
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
