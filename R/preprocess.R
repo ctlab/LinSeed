@@ -24,7 +24,9 @@ preprocessDataset <- function(dataset, annotation = NULL, geneSymbol = "Gene sym
         if (file.exists(dataset)) {
             message("File ", dataset, " exists")
             message("Reading dataset from file ", dataset)
-            dataset <- read.table.mine(dataset)
+	    message("Make sure file is tab-separated and has row and column names")
+            dataset <- read.table(dataset, header=1, row.names=1, sep="\t")
+	    message("File successfully read")
         } else {
             stop("File does not exist: ", dataset)
         }
