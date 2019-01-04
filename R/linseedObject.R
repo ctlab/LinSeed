@@ -482,9 +482,9 @@ LinseedObject <- R6Class("LinseedObject",
                                row.names = rownames(selected)
                              )
                              
-                             if (!is.null(lo$markers)) {
-                               for (i in 1:length(lo$markers)) {
-                                   toPlot[lo$markers[[i]], "marker"] <- i
+                             if (!is.null(self$markers)) {
+                               for (i in 1:length(self$markers)) {
+                                   toPlot[self$markers[[i]], "marker"] <- i
                                }
                              }
                              
