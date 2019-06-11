@@ -47,12 +47,13 @@ bioc_packages:
 
 before_install:
   - if [ ${TRAVIS_OS_NAME} = 'osx' ]; then brew install libxml2; brew install openssl; fi
-  - R -e 'BiocManager::install("CellMix", siteRepos = "http://web.cbio.uct.ac.za/~renaud/CRAN")'
+  - if [ ${TRAVIS_OS_NAME} = 'osx' ]; then R -e 'BiocManager::install("CellMix", siteRepos = "http://web.cbio.uct.ac.za/~renaud/CRAN", type="both")'; fi
+  - if [ ${TRAVIS_OS_NAME} = 'linux' ]; then R -e 'BiocManager::install("CellMix", siteRepos = "http://web.cbio.uct.ac.za/~renaud/CRAN")'; fi
 
 script:
   - R CMD build .
   - FILE=$(ls -1t *.tar.gz | head -n 1)
-  - R CMD check "$FILE"
+  - R CMD check "$FILE" --no-vignettes --no-build-vignettes
 
 after_success:
   - Rscript -e 'covr::codecov()'
