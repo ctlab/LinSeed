@@ -1,7 +1,7 @@
 Package: linseed
 Type: Package
 Title: Linear Subpsace identification to solve complete gene expression deconvolution problem
-Version: 0.99.1
+Version: 0.99.2
 Authors@R: person("Konstantin", "Zaitsev",
     email = "zayats1812@mail.ru", role = c("aut", "cre"))
 Maintainer: Konstantin Zaitsev <zayats1812@mail.ru>
@@ -38,7 +38,6 @@ Imports:
     Matrix,
     Rtsne
 Suggests:
-    CellMix,
     BiocStyle,
     knitr,
     rmarkdown,
