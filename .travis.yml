@@ -1,0 +1,65 @@
+language: r
+r:
+    #- bioc-devel
+  - bioc-release
+# warnings_are_errors: true
+sudo: false
+fortran: true
+cache: packages
+
+addons:
+  apt:
+    packages:
+      - libxml2-dev
+      - libssl-dev
+      - openssl
+
+r_packages:
+  - Rcpp
+  - RcppArmadillo
+  - BH
+  - corpcor
+  - combinat
+  - NMF
+  - R6
+  - dplyr
+  - ggplot2
+  - reshape2
+  - pheatmap
+  - progress
+  - Matrix
+  - Rtsne
+  - knitr
+  - rmarkdown
+  - testthat
+  - BiocManager
+
+os:
+  - linux
+  - osx
+
+bioc_required: true
+bioc_packages:
+  - GEOquery
+  - Biobase
+  - preprocessCore
+  - BiocStyle
+
+before_install:
+  - if [ ${TRAVIS_OS_NAME} = 'osx' ]; then brew install libxml2; brew install openssl; fi
+  - R -e 'BiocManager::install("CellMix", siteRepos = "http://web.cbio.uct.ac.za/~renaud/CRAN", type="both")'
+
+script:
+  - R CMD build .
+  - FILE=$(ls -1t *.tar.gz | head -n 1)
+  - R CMD check "$FILE"
+
+after_success:
+  - Rscript -e 'covr::codecov()'
+
+notifications:
+  email:
+    recipients:
+      - zayats1812@mail.ru
+    on_success: always
+    on_failure: always
