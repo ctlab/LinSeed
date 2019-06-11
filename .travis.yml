@@ -46,9 +46,7 @@ bioc_packages:
   - BiocStyle
 
 before_install:
-  - if [ ${TRAVIS_OS_NAME} = 'osx' ]; then brew install libxml2; brew install openssl; fi
-  - if [ ${TRAVIS_OS_NAME} = 'osx' ]; then R -e 'BiocManager::install("CellMix", siteRepos = "http://web.cbio.uct.ac.za/~renaud/CRAN", type="both")'; fi
-  - if [ ${TRAVIS_OS_NAME} = 'linux' ]; then R -e 'BiocManager::install("CellMix", siteRepos = "http://web.cbio.uct.ac.za/~renaud/CRAN")'; fi
+  - if [ ${TRAVIS_OS_NAME} = 'osx' ]; then brew install libxml2; brew install openssl; brew install cairo; fi
 
 script:
   - R CMD build .
