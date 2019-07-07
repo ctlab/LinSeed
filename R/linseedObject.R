@@ -360,7 +360,7 @@ LinseedObject <- R6Class("LinseedObject",
                            
                            calculatePairwiseLinearity = function(negToZero=T) {
                              self$pairwise <- pairwiseR2(t(self$exp$full$norm))
-                             colnames(self$pairwise) <- rownames(self$pairwise) <- rownames(self$exp$norm)
+                             colnames(self$pairwise) <- rownames(self$pairwise) <- rownames(self$exp$full$norm)
                              if (negToZero) {
                                self$pairwise[self$pairwise < 0] <- 0
                              }
