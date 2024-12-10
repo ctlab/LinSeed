@@ -59,7 +59,7 @@ plotProportions <- function(..., pnames = NULL, point_size=2, line_size=1) {
         theme(axis.title.x = element_blank(),
                        axis.text.x = element_text(angle = 45,
                                                            hjust = 1)) +
-        guides(fill = FALSE)
+        guides(fill = "none")
     if (length(proportions) > 1) {
         gplot <- gplot + theme(legend.title = element_blank(),
             legend.position = "top")
