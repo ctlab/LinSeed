@@ -148,14 +148,18 @@ guessOrder <- function(predicted, actual) {
 }
 
 
-
 toMatrix <- function(x) {
-    if (class(x) == "data.frame")
+    if (is.data.frame(x)) {
+        # Convert data frame (or tibble) to a plain matrix
         return(as.matrix(x))
-    if (inherits(x, "NMF"))
+    }
+    if (inherits(x, "NMF")) {
+        # Handle NMF objects
         return(toMatrix(coef(x)))
-    if (class(x) == "matrix")
+    }
+    if (is.matrix(x)) {
+        # Return if already a matrix
         return(x)
-    stop("invalid type for plotting")
+    }
+    stop("Invalid type for plotting: ", paste(class(x), collapse = ", "))
 }
-
