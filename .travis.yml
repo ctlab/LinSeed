@@ -18,6 +18,7 @@ r_packages:
   - Rcpp
   - RcppArmadillo
   - BH
+  - methods
   - corpcor
   - combinat
   - NMF
@@ -25,7 +26,6 @@ r_packages:
   - dplyr
   - ggplot2
   - reshape2
-  - pheatmap
   - progress
   - Matrix
   - Rtsne
@@ -60,5 +60,6 @@ notifications:
   email:
     recipients:
       - zayats1812@mail.ru
+      - denklewer@gmail.com
     on_success: always
     on_failure: always

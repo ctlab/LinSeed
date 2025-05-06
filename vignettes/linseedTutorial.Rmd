@@ -4,7 +4,7 @@ author: "Konstantin Zaitsev"
 date: "`r Sys.Date()`"
 output: html_document
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Linseed Tutorial}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -60,6 +60,9 @@ lo$projectionPlot(color="filtered")
 To deconvolve the dataset, you first have to project (full or filtered dataset) to the simplex, and then find corners of it.
 
 ```{r deconvolution}
+data <- get("filtered", lo$exp)
+Y <- t(data$norm)
+if (is.null(lo$cellTypeNumber)) stop("Set cell type number first")
 lo$project("filtered")
 lo$smartSearchCorners(dataset="filtered", error="norm")
 lo$deconvolveByEndpoints()

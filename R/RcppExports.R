@@ -5,7 +5,7 @@ fcnnls_c <- function(C, A) {
     .Call('_linseed_fcnnls_c', PACKAGE = 'linseed', C, A)
 }
 
-fcnnls_sum_to_one <- function(C, A, delta = 1) {
+fcnnls_sum_to_one <- function(C, A, delta) {
     .Call('_linseed_fcnnls_sum_to_one', PACKAGE = 'linseed', C, A, delta)
 }
 

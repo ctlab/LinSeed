@@ -6,9 +6,7 @@
 #' 
 #' @import corpcor
 #'
-#' @return
-#'
-#' @examples
+#' @return matrix with coordinates of projected points.
 projectiveProjection <- function(Y, p, spherize=F) {
   L <- nrow(Y)
   N <- ncol(Y)
@@ -26,6 +24,7 @@ projectiveProjection <- function(Y, p, spherize=F) {
   YmeanOrtho <- ym - proj %*% ym
   Up <- cbind(Up, YmeanOrtho / (sqrt(sum(YmeanOrtho ^ 2))))
   singValues <- D
+  lamSphe <- 1e-8
   
   Y <- t(Up) %*% Y
   
@@ -51,9 +50,7 @@ projectiveProjection <- function(Y, p, spherize=F) {
 #' 
 #' @import corpcor
 #'
-#' @return
-#'
-#' @examples
+#' @return projection
 getProjectiveProjection <- function(Y, p, spherize=F) {
   L <- nrow(Y)
   N <- ncol(Y)

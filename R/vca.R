@@ -6,8 +6,6 @@
 #' @param verbose verbosity, deafult value is FALSE
 #'
 #' @return matrix of columns from R which are considered to be endpoints
-#'
-#' @examples
 vca <- function(R, p, SNR=NULL, verbose=F) {
     L <- nrow(R)
     N <- ncol(R)

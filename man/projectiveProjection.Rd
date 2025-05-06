@@ -14,7 +14,7 @@ projectiveProjection(Y, p, spherize = F)
 \item{spherize}{Spherize dataset or not}
 }
 \value{
-
+matrix with coordinates of projected points.
 }
 \description{
 Projective projection

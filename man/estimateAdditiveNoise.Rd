@@ -12,8 +12,18 @@ estimateAdditiveNoise(Y, verbose)
 \item{verbose}{verbosity}
 }
 \value{
-
+list with two elements, w -- estimated noise and Rw estimated noise correlation matrix
 }
 \description{
 Additive noise estimation subroutine
+}
+\examples{
+n_genes <- 50
+n_samples <-  40
+n_values <-  n_genes * n_samples
+expression_matrix <- matrix(abs(rexp(n_genes*4, rate=2)), ncol=4) \%*\%
+                     matrix(abs(runif(n_samples * 4, 0, 1)), nrow =4)
+noise_matrix <- matrix(rnorm(n_genes*n_samples, 0, 0.02), nrow = n_genes)
+noisy_matrix <-  expression_matrix + noise_matrix
+noise_estimation_result <-  estimateAdditiveNoise(noisy_matrix, verbose = FALSE)
 }

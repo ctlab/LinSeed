@@ -32,12 +32,11 @@
 #' (\href{http://www.ncbi.nlm.nih.gov/pubmed/20208531}{PubMed})
 #'
 #' @source \href{http://qtlarchive.org/db/q?pg=projdetails&proj=moore_2013b}{QTL Archive}
-#'
 #' @examples
-#' 
-#' @export
 #' data("proportionsLiverBrainLung")
 #' mixedProportions <- proportionsLiverBrainLung[, 10:42]
-#' barplot(mixedProportions, main='Proprotions of tissues in samples', col=c('#00BA38','#F8766D', '#619CFF'),
+#' barplot(mixedProportions,
+#'         main='Proprotions of tissues in samples',
+#'         col=c('#00BA38','#F8766D', '#619CFF'),
 #'         legend = rownames(mixedProportions))
 NULL

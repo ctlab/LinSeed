@@ -40,7 +40,7 @@ arma::mat cssls(const arma::mat& CtC,
 
     breakIdx[bbreaks.n_elem + 1] = RHSc;
 
-    for (int k = 0; k < breakIdx.n_elem - 1; k++) {
+    for (unsigned int k = 0; k < breakIdx.n_elem - 1; k++) {
         uvec cols2solve = sortedEset.subvec(breakIdx[k], breakIdx[k + 1] - 1);
         uvec vars = find(Pset.col(sortedEset[breakIdx[k]]));
         if (vars.n_elem == 0) break;
@@ -49,10 +49,9 @@ arma::mat cssls(const arma::mat& CtC,
     }
     return K;
 }
-// [[Rcpp::export]]
+
 arma::mat fcnnls_c(const arma::mat& C,
                    const arma::mat& A) {
-    int n_obs = C.n_rows;
     int l_var = C.n_cols;
     if (C.n_rows != A.n_rows) {
         throw Rcpp::exception("Wrong argument sizes", "fcnnls.cpp", 4);
@@ -85,7 +84,7 @@ arma::mat fcnnls_c(const arma::mat& C,
                 twos.fill(2);
                 uvec ij = find(Pset.cols(Hset) + (K.cols(Hset) < 0) == twos);
                 uvec is(ij.n_elem), js(ij.n_elem);
-                for (int i = 0; i < ij.n_elem; i++) {
+                for (unsigned int i = 0; i < ij.n_elem; i++) {
                     is[i] = ij[i] % Pset.n_rows;
                     js[i] = ij[i] / Pset.n_rows;
                 }
@@ -139,7 +138,7 @@ arma::mat fcnnls_c(const arma::mat& C,
 
 }
 
-// [[Rcpp::export]]
+
 arma::mat fcnnls_sum_to_one(const arma::mat& C,
                             const arma::mat& A,
                             double delta = 1) {

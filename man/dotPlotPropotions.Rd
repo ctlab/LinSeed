@@ -4,8 +4,13 @@
 \alias{dotPlotPropotions}
 \title{Proportions dot plot}
 \usage{
-dotPlotPropotions(predicted, actual, guess = FALSE, main = NULL,
-  showR2 = FALSE)
+dotPlotPropotions(
+  predicted,
+  actual,
+  guess = FALSE,
+  main = NULL,
+  showR2 = FALSE
+)
 }
 \arguments{
 \item{predicted}{matrix of predicted proportions}
@@ -17,6 +22,9 @@ dotPlotPropotions(predicted, actual, guess = FALSE, main = NULL,
 \item{main}{plot title}
 
 \item{showR2}{calculate and show R squared statistics}
+}
+\value{
+ggplot dot plot. X axis is true proportion, Y axix is predicted proportion
 }
 \description{
 Proportions dot plot

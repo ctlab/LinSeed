@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // fcnnls_c
 arma::mat fcnnls_c(const arma::mat& C, const arma::mat& A);
 RcppExport SEXP _linseed_fcnnls_c(SEXP CSEXP, SEXP ASEXP) {

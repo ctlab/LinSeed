@@ -32,10 +32,7 @@
 #' (\href{http://www.ncbi.nlm.nih.gov/pubmed/20208531}{PubMed})
 #'
 #' @source \href{http://qtlarchive.org/db/q?pg=projdetails&proj=moore_2013b}{QTL Archive}
-#'
 #' @examples
-#' 
-#' @export
 #' data("datasetLiverBrainLung")
 #' mixedSamples <- datasetLiverBrainLung[, 10:42]
 #' clustered <- preprocessDataset(mixedSamples)

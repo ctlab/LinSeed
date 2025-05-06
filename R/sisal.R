@@ -20,9 +20,7 @@
 #' @import corpcor
 #' @import dplyr
 #'
-#' @return
-#'
-#' @examples
+#' @return list containing the results of the sisal algorithm including original endpoints and their projection.
 sisal <- function(Y, p, iters = 80, tau = 1,
                   mu = p * 1000 / ncol(Y),
                   spherize = F, tol = 1e-2, m0 = NULL, verbose=F,

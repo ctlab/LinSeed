@@ -4,8 +4,13 @@
 \alias{preprocessDataset}
 \title{Preprocess Dataset}
 \usage{
-preprocessDataset(dataset, annotation = NULL,
-  geneSymbol = "Gene symbol", samples = NULL, topGenes = 10000)
+preprocessDataset(
+  dataset,
+  annotation = NULL,
+  geneSymbol = "Gene symbol",
+  samples = NULL,
+  topGenes = 10000
+)
 }
 \arguments{
 \item{dataset}{matrix, data.frame, path to file or GSE accession with expression data}
@@ -28,7 +33,4 @@ Preprocesses given dataset. Preprocessing consists of 3 major steps:
    It's common technique in microarray data analysis.
 2) If needed, only highly expressed genes are taken for further analysis. (Say hello to noize reduction)
 3) All genes are clustered with Kmeans using cosine simillarity as distance.
-}
-\examples{
-
 }

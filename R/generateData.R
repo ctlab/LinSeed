@@ -18,10 +18,8 @@
 #' @param sampleLogSd standard deviation of log expression of pure samples
 #' @param cutCoef if removeAngles == T how much to cut angles
 #'
-#' @return
+#' @return list(data, proportions, basis,correlations_within_basis)
 #' @export
-#'
-#' @examples
 generateMixedData <- function(samples=40, genes=12000, cellTypes=3, bias = NULL, spearmanThreshold = 0.5,
                               pureGenes = 0, noiseDeviation = 0, sampleLogMean = 4, sampleLogSd = 3,
                               removeAngles = F, cutCoef = 0.85,
@@ -64,7 +62,7 @@ generateMixedData <- function(samples=40, genes=12000, cellTypes=3, bias = NULL,
     }
 
     if (removeBorders) {
-        shift <- (1 / borderShift - 1) / k
+        shift <- (1 / borderShift - 1) / cellTypes
         basis <- basis + shift
         basis <- apply(basis, 2, function(x) x / sum(x))
     }
@@ -103,8 +101,6 @@ generateMixedData <- function(samples=40, genes=12000, cellTypes=3, bias = NULL,
 #'
 #'
 #' @return matrix where columns are points
-#'
-#' @examples
 sampleFromSimplexUniformly <- function(n, k=3, M=100000) {
     X <- matrix(0, nrow = k + 1, ncol=n)
     X[k + 1, ] <- M

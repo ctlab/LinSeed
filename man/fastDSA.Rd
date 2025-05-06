@@ -9,7 +9,7 @@ fastDSA(dataset, genes)
 \arguments{
 \item{dataset}{gene expression matrix}
 
-\item{genes, }{list with putative signatures for DSA algorithm}
+\item{genes}{list with putative signatures for DSA algorithm}
 }
 \value{
 deconvolution results, list with H and W matrices

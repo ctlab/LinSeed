@@ -14,9 +14,7 @@
 #' @param topGenes integer How many genes include in analysis. We suppose to include only expressed genes. Default value is 10000
 #'
 #' @return clustered dataset, matrix, first column identifies cluster of the row
-#'
-#' @examples
-#'
+#' @import methods
 #' @export
 preprocessDataset <- function(dataset, annotation = NULL, geneSymbol = "Gene symbol",
     samples = NULL, topGenes = 10000) {

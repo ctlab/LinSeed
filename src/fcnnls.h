@@ -1,3 +1,5 @@
+// [[Rcpp::depends(BH)]]
+// [[Rcpp::depends(RcppArmadillo)]]
 #include <RcppArmadillo.h>
 #include <random>
 #include <math.h>
@@ -10,5 +12,7 @@ using namespace arma;
 
 arma::mat cssls(const arma::mat& CtC, const arma::mat& CtA, bool pseudo);
 arma::mat cssls(const arma::mat& CtC, const arma::mat& CtA, const arma::umat& Pset, bool pseudo);
+// [[Rcpp::export]]
 arma::mat fcnnls_c(const arma::mat& C, const arma::mat& A);
+// [[Rcpp::export]]
 arma::mat fcnnls_sum_to_one(const arma::mat& C, const arma::mat& A, double delta);
