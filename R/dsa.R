@@ -3,9 +3,10 @@
 #' Runs DSA implementation using .fccnls for solving least-squares with multiple right-hand-sides
 #'
 #' @param dataset gene expression matrix
-#' @param genes, list with putative signatures for DSA algorithm
+#' @param genes list with putative signatures for DSA algorithm
 #' @import NMF
 #' @import corpcor
+#' @import BH
 #' 
 #' @return deconvolution results, list with H and W matrices
 fastDSA <- function(dataset, genes) {
@@ -24,6 +25,7 @@ fastDSA <- function(dataset, genes) {
 #'
 #' @param dataset gene expression matrix
 #' @param pure matrix contains expression of signature genes
+#' @import BH
 #'
 #' @return deconvolution results, list with H and W matrices
 pureDsa <- function(dataset, pure) {

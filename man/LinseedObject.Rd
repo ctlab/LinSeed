@@ -4,24 +4,31 @@
 \name{LinseedObject}
 \alias{LinseedObject}
 \title{Linseed Object}
-\format{\code{\link{R6Class}} object.}
-\usage{
-LinseedObject
+\format{
+\code{\link{R6Class}} object.
 }
 \value{
 Object of \code{\link{R6Class}} -- an interface to work with gene expression data.
 }
 \description{
-The Linseed Object Class.
+Linseed Object
+
+Linseed Object
 }
 \details{
+The Linseed Object Class. 
+
 Provides an interface to perform 
 collinear network construction,
 linear subspace identification, 
 simplex corner identification and gene expression deconvolution
 }
-\section{Fields}{
+\examples{
+LinseedObject$new("GSE19830", samples=10:42, topGenes=10000)
 
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{exp}}{List of two elements raw and normalized gene expression dataset}
 
@@ -45,18 +52,417 @@ corner detection and deconvolution}
 \item{\code{proportions}}{Deconvolution proportion matrix}
 
 \item{\code{pairwise}}{Calculated pairwise collinearity measure}
-}}
 
+\item{\code{spearman}}{Calculated spearman correlations}
+
+\item{\code{genes}}{genes significance test result list.}
+
+\item{\code{projectiveProjection}}{calculated projection operator}
+
+\item{\code{Q}}{Q matrix obtained from sysal alogorithm}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-LinseedObject-new}{\code{LinseedObject$new()}}
+\item \href{#method-LinseedObject-svdPlot}{\code{LinseedObject$svdPlot()}}
+\item \href{#method-LinseedObject-hysime}{\code{LinseedObject$hysime()}}
+\item \href{#method-LinseedObject-setCellTypeNumber}{\code{LinseedObject$setCellTypeNumber()}}
+\item \href{#method-LinseedObject-project}{\code{LinseedObject$project()}}
+\item \href{#method-LinseedObject-projectionPlot}{\code{LinseedObject$projectionPlot()}}
+\item \href{#method-LinseedObject-sisalCorners}{\code{LinseedObject$sisalCorners()}}
+\item \href{#method-LinseedObject-selectGenes}{\code{LinseedObject$selectGenes()}}
+\item \href{#method-LinseedObject-deconvolve}{\code{LinseedObject$deconvolve()}}
+\item \href{#method-LinseedObject-deconvolutionError}{\code{LinseedObject$deconvolutionError()}}
+\item \href{#method-LinseedObject-deconvolveByEndpoints}{\code{LinseedObject$deconvolveByEndpoints()}}
+\item \href{#method-LinseedObject-calculateSpearmanCorrelation}{\code{LinseedObject$calculateSpearmanCorrelation()}}
+\item \href{#method-LinseedObject-calculateSignificanceLevel}{\code{LinseedObject$calculateSignificanceLevel()}}
+\item \href{#method-LinseedObject-calculatePairwiseLinearity}{\code{LinseedObject$calculatePairwiseLinearity()}}
+\item \href{#method-LinseedObject-smartSearchCorners}{\code{LinseedObject$smartSearchCorners()}}
+\item \href{#method-LinseedObject-filterDatasetByPval}{\code{LinseedObject$filterDatasetByPval()}}
+\item \href{#method-LinseedObject-filterDataset}{\code{LinseedObject$filterDataset()}}
+\item \href{#method-LinseedObject-tsnePlot}{\code{LinseedObject$tsnePlot()}}
+\item \href{#method-LinseedObject-significancePlot}{\code{LinseedObject$significancePlot()}}
+\item \href{#method-LinseedObject-clone}{\code{LinseedObject$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-new"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-new}{}}}
+\subsection{Method \code{new()}}{
+Constructor
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$new(...)}\if{html}{\out{</div>}}
+}
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
 \describe{
-
+\item{\code{...}}{dataset matrix/GSE identifier as well as preprocessing parameters}
+}
+\if{html}{\out{</div>}}
 }
 }
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-svdPlot"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-svdPlot}{}}}
+\subsection{Method \code{svdPlot()}}{
+Plot singular values elbow plot
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$svdPlot(dataset = "norm", components = 50)}\if{html}{\out{</div>}}
+}
 
-\examples{
-LinseedObject$new("GSE19830", samples=10:42, topGenes=10000)
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataset}}{matrix identifier, can be "norm"or "raw"}
 
+\item{\code{components}}{number of components to plot}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-hysime"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-hysime}{}}}
+\subsection{Method \code{hysime()}}{
+Evalutes number of cell types presented in mixture using (HySime) hyperspectral signal identification by minimum error
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$hysime(dataset = "filtered", error = "norm", set = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataset}}{dataset identifier, can be "filtered"or "full}
+
+\item{\code{error}}{matrix identifier within the dataset}
+
+\item{\code{set}}{wether to set identified cell type number to the object}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-setCellTypeNumber"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-setCellTypeNumber}{}}}
+\subsection{Method \code{setCellTypeNumber()}}{
+Setter for sell type numbers
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$setCellTypeNumber(k)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{k}}{number to set}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-project"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-project}{}}}
+\subsection{Method \code{project()}}{
+Perform projection
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$project(dataset)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataset}}{dataset identifier can be "filtered" or "full"}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-projectionPlot"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-projectionPlot}{}}}
+\subsection{Method \code{projectionPlot()}}{
+Plot projected points
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$projectionPlot(dims = 1:2, color = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dims}}{dimensions to plot}
+
+\item{\code{color}}{which points to color (corner, type, cluster, filtered)}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-sisalCorners"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-sisalCorners}{}}}
+\subsection{Method \code{sisalCorners()}}{
+Identify corners in projected space
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$sisalCorners(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{extra arguments for sisal algorithm}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-selectGenes"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-selectGenes}{}}}
+\subsection{Method \code{selectGenes()}}{
+Take top genes using distances calculated
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$selectGenes(n)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{n}}{how many genes to select}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-deconvolve"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-deconvolve}{}}}
+\subsection{Method \code{deconvolve()}}{
+Solve the deconvolution of the dataset matrix
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$deconvolve(
+  dataset = "filtered",
+  error = "norm",
+  method = "dsa",
+  ...
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataset}}{dataset identifier (filtered, full)}
+
+\item{\code{error}}{matrix identifier within dataset}
+
+\item{\code{method}}{which method to use ("dsa" by default, willl try CelLmix if something else)}
+
+\item{\code{...}}{CellMix parameters}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-deconvolutionError"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-deconvolutionError}{}}}
+\subsection{Method \code{deconvolutionError()}}{
+Calculate deconvolution error
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$deconvolutionError(dataset = "filtered", error = "norm")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataset}}{dataset identifier (filtered, full)}
+
+\item{\code{error}}{matrix identifier within dataset}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-deconvolveByEndpoints"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-deconvolveByEndpoints}{}}}
+\subsection{Method \code{deconvolveByEndpoints()}}{
+Calculated and set the deconvolution solution based on found endpoints in projected space
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$deconvolveByEndpoints(dataset = "filtered", error = "norm")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataset}}{dataset identifier (filtered, full)}
+
+\item{\code{error}}{matrix identifier within dataset}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-calculateSpearmanCorrelation"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-calculateSpearmanCorrelation}{}}}
+\subsection{Method \code{calculateSpearmanCorrelation()}}{
+Calculate correlation between rows of the matrix
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$calculateSpearmanCorrelation()}\if{html}{\out{</div>}}
+}
 
 }
-\keyword{datasets}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-calculateSignificanceLevel"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-calculateSignificanceLevel}{}}}
+\subsection{Method \code{calculateSignificanceLevel()}}{
+Significance test which will calculate p value for each each by shuffling network weights randomly
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$calculateSignificanceLevel(
+  iters = 1000,
+  spearmanThreshold = 0,
+  retVal = F
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{iters}}{number of shuffles}
+
+\item{\code{spearmanThreshold}}{threshold of correlation to consider (consider higher than this value)}
+
+\item{\code{retVal}}{Wether to return pvalues}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-calculatePairwiseLinearity"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-calculatePairwiseLinearity}{}}}
+\subsection{Method \code{calculatePairwiseLinearity()}}{
+Calculate all pairwise collinearity coefficients
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$calculatePairwiseLinearity(negToZero = T)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{negToZero}}{wether to remove negative correlations}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-smartSearchCorners"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-smartSearchCorners}{}}}
+\subsection{Method \code{smartSearchCorners()}}{
+The main interface to search corners in projected space with sisal
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$smartSearchCorners(
+  taus = 2^seq(0, -20, -1),
+  sisalIter = 100,
+  dataset = "filtered",
+  error = "norm"
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{taus}}{taus parameter for sisal}
+
+\item{\code{sisalIter}}{number of iterations}
+
+\item{\code{dataset}}{dataset identifier (filtered, full)}
+
+\item{\code{error}}{matrix identifier within the dataset}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-filterDatasetByPval"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-filterDatasetByPval}{}}}
+\subsection{Method \code{filterDatasetByPval()}}{
+Remove features which have pvalue of correlation higher than threshold
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$filterDatasetByPval(pval = 0.001)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{pval}}{pvalue threshold}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-filterDataset"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-filterDataset}{}}}
+\subsection{Method \code{filterDataset()}}{
+Remove subset of genes
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$filterDataset(geneSubset)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{geneSubset}}{vector of genes}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-tsnePlot"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-tsnePlot}{}}}
+\subsection{Method \code{tsnePlot()}}{
+Build t-SNE dimensionality reduction plot
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$tsnePlot(dataset = "filtered", error = "norm")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataset}}{dataset identifier (filtered, full)}
+
+\item{\code{error}}{matrix identifier within the dataset}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-significancePlot"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-significancePlot}{}}}
+\subsection{Method \code{significancePlot()}}{
+Visualize significance plot for genes, based on significance test. Color by pValue
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$significancePlot(threshold = 0.001)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{threshold}}{pValue threshold}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LinseedObject-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-LinseedObject-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LinseedObject$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}

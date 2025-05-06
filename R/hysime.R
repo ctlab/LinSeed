@@ -15,8 +15,6 @@
 #' @import ggplot2
 #'
 #' @return list
-#'
-#' @examples
 hysime <- function(Y, W, Rn, verbose=FALSE) {
     L <- nrow(Y)
     N <- ncol(Y)

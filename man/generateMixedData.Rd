@@ -4,11 +4,21 @@
 \alias{generateMixedData}
 \title{Generate mixed data with or without noise}
 \usage{
-generateMixedData(samples = 40, genes = 12000, cellTypes = 3,
-  bias = NULL, spearmanThreshold = 0.5, pureGenes = 0,
-  noiseDeviation = 0, sampleLogMean = 4, sampleLogSd = 3,
-  removeAngles = F, cutCoef = 0.85, removeBorders = F,
-  borderShift = 0.25)
+generateMixedData(
+  samples = 40,
+  genes = 12000,
+  cellTypes = 3,
+  bias = NULL,
+  spearmanThreshold = 0.5,
+  pureGenes = 0,
+  noiseDeviation = 0,
+  sampleLogMean = 4,
+  sampleLogSd = 3,
+  removeAngles = F,
+  cutCoef = 0.85,
+  removeBorders = F,
+  borderShift = 0.25
+)
 }
 \arguments{
 \item{samples}{number of samples}
@@ -36,6 +46,9 @@ generateMixedData(samples = 40, genes = 12000, cellTypes = 3,
 \item{removeBorders}{if TRUE where will be no genes close to simplex border}
 
 \item{borderShift}{number in between 0 and 1, every value in basis is guaranteed to be at least borderShift}
+}
+\value{
+list(data, proportions, basis,correlations_within_basis)
 }
 \description{
 Generates mixed data with or without noise under assumption of linear model

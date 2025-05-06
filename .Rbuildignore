@@ -1,2 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^Readme.md
+^Readme_files
+^\.travis\.yml$
+^\.idea

@@ -4,20 +4,17 @@
 #' If ggplot2 and reshape2 are installed will use them and return ggplot object
 #' Otherwise will use standart R functions
 #'
-#'@param ... matricies, data frames, NMF objects of estimated proportions or paths to file
-#'@param point_size point size for plot
-#'@param line_size line size for plot
-#'@param pnames experiment titles
+#' @param ... matricies, data frames, NMF objects of estimated proportions or paths to file
+#' @param point_size point size for plot
+#' @param line_size line size for plot
+#' @param pnames experiment titles
 #'
-#'@return ggplot object
+#' @return ggplot object
 #'
 #'
-#'@import ggplot2
-#'@import reshape2
-#'
-#'@examples
-#'
-#'@export
+#' @import ggplot2
+#' @import reshape2
+#' @export
 plotProportions <- function(..., pnames = NULL, point_size=2, line_size=1) {
     proportions <- list(...)
     proportions <- lapply(proportions, toMatrix)
@@ -59,7 +56,7 @@ plotProportions <- function(..., pnames = NULL, point_size=2, line_size=1) {
         theme(axis.title.x = element_blank(),
                        axis.text.x = element_text(angle = 45,
                                                            hjust = 1)) +
-        guides(fill = FALSE)
+        guides(fill = "none")
     if (length(proportions) > 1) {
         gplot <- gplot + theme(legend.title = element_blank(),
             legend.position = "top")
@@ -81,10 +78,8 @@ plotProportions <- function(..., pnames = NULL, point_size=2, line_size=1) {
 #' @import ggplot2
 #' @import reshape2
 #'
-#' @return
+#' @return ggplot dot plot. X axis is true proportion, Y axix is predicted proportion
 #' @export
-#'
-#' @examples
 dotPlotPropotions <- function(predicted, actual, guess=FALSE, main=NULL, showR2=FALSE) {
   predicted <- as.matrix(predicted)
   actual <- as.matrix(actual)
@@ -134,8 +129,6 @@ dotPlotPropotions <- function(predicted, actual, guess=FALSE, main=NULL, showR2=
 #' @param actual actual proportions
 #'
 #' @return numeric, correct order of predicted proportions
-#'
-#' @examples
 guessOrder <- function(predicted, actual) {
   ctn <- nrow(predicted)
   allPerms <- permn(ctn)
@@ -147,15 +140,20 @@ guessOrder <- function(predicted, actual) {
   return(perm)
 }
 
-
-
 toMatrix <- function(x) {
-    if (class(x) == "data.frame")
+    if (is.data.frame(x)) {
+        # Convert data frame (or tibble) to a plain matrix
         return(as.matrix(x))
-    if (inherits(x, "NMF"))
+    }
+    if (inherits(x, "NMF")) {
+        # Handle NMF objects
         return(toMatrix(coef(x)))
-    if (class(x) == "matrix")
+    }
+    if (is.matrix(x)) {
+        # Return if already a matrix
         return(x)
-    stop("invalid type for plotting")
+    }
+    stop("Invalid type for plotting: ", paste(class(x), collapse = ", "))
 }
+
 

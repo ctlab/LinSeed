@@ -23,6 +23,3 @@ Draws a plot of estimated proprotions
 If ggplot2 and reshape2 are installed will use them and return ggplot object
 Otherwise will use standart R functions
 }
-\examples{
-
-}

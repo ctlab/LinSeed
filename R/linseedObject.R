@@ -29,20 +29,19 @@
 #' @field signatures Deconvolution signature matrix
 #' @field proportions Deconvolution proportion matrix
 #' @field pairwise Calculated pairwise collinearity measure
-#' 
-#' @section Methods:
-#' \describe{
-#' 
-#' }
+#' @field spearman Calculated spearman correlations
+#' @field genes genes significance test result list.
+#' @field projectiveProjection calculated projection operator
+#' @field Q Q matrix obtained from sysal alogorithm
+#'
 #' @name LinseedObject
-#' @import R6
+#' @import Rcpp
+#' @import RcppArmadillo
 #' @import dplyr
 #' @import ggplot2
 #' @import Matrix
 #' @import progress
 #' @import Rtsne
-#' @examples
-#' 
 LinseedObject <- R6Class("LinseedObject",
                           public = list(
                            exp = list(full=list(raw=NULL, norm=NULL),
@@ -73,7 +72,10 @@ LinseedObject <- R6Class("LinseedObject",
                            
                            projectiveProjection = NULL,
                            Q = NULL,
-                           
+
+                           #' @description
+                           #' Constructor
+                           #' @param ... dataset matrix/GSE identifier as well as preprocessing parameters
                            initialize = function(...) {
                              args <- list(...)
                              dataset <- args[[1]]
@@ -86,7 +88,10 @@ LinseedObject <- R6Class("LinseedObject",
                              self$exp$full$raw <- dataset
                              self$exp$full$norm <- dataset / rowSums(dataset)
                            },
-                           
+                           #' @description
+                           #' Plot singular values elbow plot
+                           #' @param dataset matrix identifier, can be "norm"or "raw"
+                           #' @param components number of components to plot
                            svdPlot = function(dataset="norm", components=50) {
                              dataFull <- get(dataset, self$exp$full)
                              dataFiltered <- get(dataset, self$exp$filtered)
@@ -125,7 +130,12 @@ LinseedObject <- R6Class("LinseedObject",
                                                            limits=c(0, components))
                           
                            },
-                           
+
+                           #' @description
+                           #' Evalutes number of cell types presented in mixture using (HySime) hyperspectral signal identification by minimum error
+                           #' @param dataset dataset identifier, can be "filtered"or "full
+                           #' @param error matrix identifier within the dataset
+                           #' @param set wether to set identified cell type number to the object
                            hysime = function(dataset="filtered", error="norm", set=FALSE) {
                              
                              data <- get(dataset, self$exp)
@@ -139,11 +149,17 @@ LinseedObject <- R6Class("LinseedObject",
                              }
                              return(hysimeRes)
                            },
-                           
+
+                           #' @description
+                           #' Setter for sell type numbers
+                           #' @param k number to set
                            setCellTypeNumber = function(k) {
                              self$cellTypeNumber <- k
                            },
-                           
+
+                           #' @description
+                           #' Perform projection
+                           #' @param dataset dataset identifier can be "filtered" or "full"
                            project = function(dataset) {
                              data <- get(dataset, self$exp)
                              Y <- t(data$norm)
@@ -151,7 +167,11 @@ LinseedObject <- R6Class("LinseedObject",
                              self$projection <- projectiveProjection(Y, self$cellTypeNumber)
                              self$projectiveProjection <- getProjectiveProjection(Y, self$cellTypeNumber)
                            },
-                           
+
+                           #' @description
+                           #' Plot projected points
+                           #' @param dims dimensions to plot
+                           #' @param color which points to color (corner, type, cluster, filtered)
                            projectionPlot = function(dims=1:2, color=NULL) {
                              if (is.null(self$projection)) {
                                stop("You have to call 'project' method first")
@@ -215,7 +235,10 @@ LinseedObject <- R6Class("LinseedObject",
                              }
                              pl
                            },
-                           
+
+                           #' @description
+                           #' Identify corners in projected space
+                           #' @param ... extra arguments for sisal algorithm
                            sisalCorners = function(...){
                              
                              if (is.null(self$exp$filtered$norm)) {
@@ -232,7 +255,10 @@ LinseedObject <- R6Class("LinseedObject",
                              self$Q = sisalRes$Q
                              self$projectiveProjection = sisalRes$projection
                            },
-                           
+
+                           #' @description
+                           #' Take top genes using distances calculated
+                           #' @param n how many genes to select
                            selectGenes = function(n) {
                              pureGeneSets <- apply(self$distances, 2, function(xx) {
                                pure <- rownames(self$distances)[order(xx)[1:n]]
@@ -241,7 +267,13 @@ LinseedObject <- R6Class("LinseedObject",
                              pureGeneSets <-  split(pureGeneSets, rep(1:ncol(pureGeneSets), each = nrow(pureGeneSets)))
                              self$markers <- pureGeneSets
                            },
-                           
+
+                           #' @description
+                           #' Solve the deconvolution of the dataset matrix
+                           #' @param dataset dataset identifier (filtered, full)
+                           #' @param error matrix identifier within dataset
+                           #' @param method which method to use ("dsa" by default, willl try CelLmix if something else)
+                           #' @param ... CellMix parameters
                            deconvolve = function(dataset="filtered", error="norm", method="dsa", ...) {
                              if (!method %in% c("dsa", "ssFrobenius")) {
                                stop("Supported methods are `dsa` and `ssFrobenius`")
@@ -273,7 +305,10 @@ LinseedObject <- R6Class("LinseedObject",
                              
                            },
                            
-                           
+                           #' @description
+                           #' Calculate deconvolution error
+                           #' @param dataset dataset identifier (filtered, full)
+                           #' @param error matrix identifier within dataset
                            deconvolutionError = function(dataset="filtered", error="norm") {
                              data <- get(dataset, self$exp)
                              selected <- get(error, data)
@@ -281,7 +316,11 @@ LinseedObject <- R6Class("LinseedObject",
                              diff <- selected - reconstruct
                              return(norm(diff, "F"))
                            },
-                           
+
+                           #' @description
+                           #' Calculated and set the deconvolution solution based on found endpoints in projected space
+                           #' @param dataset dataset identifier (filtered, full)
+                           #' @param error matrix identifier within dataset
                            deconvolveByEndpoints = function(dataset="filtered", error="norm") {
                              data <- get(dataset, self$exp)
                              selected <- get(error, data)
@@ -298,11 +337,17 @@ LinseedObject <- R6Class("LinseedObject",
                              colnames(self$signatures) <- ctNames
                              rownames(self$proportions) <- ctNames
                            },
-                           
+
+                           #' @description
+                           #' Calculate correlation between rows of the matrix
                            calculateSpearmanCorrelation = function() {
                              self$spearman <- cor(t(self$exp$full$norm), method="spearman")
                            },
-                           
+                           #' @description
+                           #' Significance test which will calculate p value for each each by shuffling network weights randomly
+                           #' @param iters number of shuffles
+                           #' @param spearmanThreshold threshold of correlation to consider (consider higher than this value)
+                           #' @param retVal Wether to return pvalues
                            calculateSignificanceLevel = function(iters=1000,
                                                                  spearmanThreshold=0,
                                                                  retVal=F) {
@@ -357,7 +402,10 @@ LinseedObject <- R6Class("LinseedObject",
                              
                              if (retVal) return(pvals)
                            },
-                           
+
+                           #' @description
+                           #' Calculate all pairwise collinearity coefficients
+                           #' @param negToZero wether to remove negative correlations
                            calculatePairwiseLinearity = function(negToZero=T) {
                              self$pairwise <- pairwiseR2(t(self$exp$full$norm))
                              colnames(self$pairwise) <- rownames(self$pairwise) <- rownames(self$exp$full$norm)
@@ -365,7 +413,13 @@ LinseedObject <- R6Class("LinseedObject",
                                self$pairwise[self$pairwise < 0] <- 0
                              }
                            },
-                           
+
+                           #' @description
+                           #' The main interface to search corners in projected space with sisal
+                           #' @param taus taus parameter for sisal
+                           #' @param sisalIter number of iterations
+                           #' @param dataset dataset identifier (filtered, full)
+                           #' @param error matrix identifier within the dataset
                            smartSearchCorners = function(taus = 2^seq(0, -20, -1),
                                                          sisalIter=100,
                                                          dataset="filtered",
@@ -457,7 +511,9 @@ LinseedObject <- R6Class("LinseedObject",
                              
                            }, 
                            
-                           
+                           #' @description
+                           #' Remove features which have pvalue of correlation higher than threshold
+                           #' @param pval pvalue threshold
                            filterDatasetByPval = function(pval=0.001) {
                              message(sprintf("Total number of genes is %d", nrow(self$exp$full$norm)))
                              geneSubset <- rownames(self$exp$full$norm[self$genes$pvals < pval, ])
@@ -465,11 +521,18 @@ LinseedObject <- R6Class("LinseedObject",
                              message(sprintf("The number of genes after filtering is %d", nrow(self$exp$filtered$norm)))
                            },
 
+                           #' @description
+                           #' Remove subset of genes
+                           #' @param geneSubset vector of genes
                            filterDataset = function(geneSubset) {
                              self$exp$filtered$raw <- self$exp$full$raw[geneSubset, ]
                              self$exp$filtered$norm <- self$exp$full$norm[geneSubset, ]
                            },
-                           
+
+                           #' @description
+                           #' Build t-SNE dimensionality reduction plot
+                           #' @param dataset dataset identifier (filtered, full)
+                           #' @param error matrix identifier within the dataset
                            tsnePlot = function(dataset="filtered", error="norm") {
                              data <- get(dataset, self$exp)
                              selected <- get(error, data)
@@ -496,8 +559,11 @@ LinseedObject <- R6Class("LinseedObject",
                                guides(color=guide_legend(title="Simplex\ncorner"))
                              
                            },
-                           
-                           significancePlot = function(threshold=0.001) {
+
+                           #' @description
+                           #' Visualize significance plot for genes, based on significance test. Color by pValue
+                           #' @param threshold pValue threshold
+                            significancePlot = function(threshold=0.001) {
                              toPlot <- as.data.frame(self$genes)
                              toPlot$name <- rownames(self$exp$full$norm)
                              toPlot$significant <- toPlot$pvals < threshold

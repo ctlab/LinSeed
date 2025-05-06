@@ -14,7 +14,7 @@ getProjectiveProjection(Y, p, spherize = F)
 \item{spherize}{Spherize dataset or not}
 }
 \value{
-
+projection
 }
 \description{
 Get projective projection

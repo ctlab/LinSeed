@@ -12,7 +12,7 @@ softNeg(Y, tau)
 \item{tau}{coefficient to penalize for volume}
 }
 \value{
-
+score value
 }
 \description{
 Soft negative score

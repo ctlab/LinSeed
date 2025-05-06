@@ -16,8 +16,6 @@
 #' @param ge gene expression matrix
 #'
 #' @return gene expression matrix in linear scale
-#'
-#' @examples
 linearizeDataset <- function(ge) {
     if (is_logscale(ge))
         return(2^ge - 1)
@@ -29,8 +27,6 @@ linearizeDataset <- function(ge) {
 #' @param ge gene expression matrix
 #'
 #' @return gene expression matrix in log scale
-#'
-#' @examples
 logDataset <- function(ge) {
     if (is_logscale(ge))
         return(ge)
@@ -43,8 +39,6 @@ logDataset <- function(ge) {
 #' @param x gene expression matrix
 #'
 #' @return logical, whether x is in the log scale
-#'
-#' @examples
 is_logscale <- function(x) {
     qx <- quantile(as.numeric(x), na.rm = T)
     if (qx[5] - qx[1] > 100 || qx[5] > 100) {
