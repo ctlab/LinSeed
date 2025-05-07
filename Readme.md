@@ -3,6 +3,11 @@ Linseed tutorial
 
 Linseed (LINear Subspace identification for gene Expresion Deconvolution) is a package that provides tools and interface to explore gene expression datasets in linear space.
 
+⚠️ Notice
+The current version of this tool is stable and should work as expected. We will continue to maintain it to ensure it remains functional, addressing only critical bugs as needed. However, no new features will be added in this repository.
+For enhanced functionality and continued development of deconvolution methods, please refer to our new tool, [DualSimplex](https://github.com/artyomovlab/dualsimplex_paper), which represents the next step in this line of work.
+
+
 Installing the package
 ----------------------
 
