@@ -1,8 +1,11 @@
 Linseed tutorial
 ================
 Linseed (LINear Subspace identification for gene Expresion Deconvolution) is a package that provides tools and interface to explore gene expression datasets in linear space.
+
 Paper for citing: [Paper link](https://www.nature.com/articles/s41467-019-09990-5)
+
 Zaitsev, K., Bambouskova, M., Swain, A. et al. Complete deconvolution of cellular mixtures based on linearity of transcriptional signatures. Nat Commun 10, 2209 (2019). https://doi.org/10.1038/s41467-019-09990-5
+
 ⚠️ Notice
 
 The current version of this tool is stable and should work as expected. We will continue to maintain it to ensure it remains functional, addressing only critical bugs as needed. However, no new features will be added in this repository.
